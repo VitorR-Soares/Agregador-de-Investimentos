@@ -1,0 +1,11 @@
+services:
+  mysql:
+    container_name: 'guide-mysql'
+    image: 'mysql:latest'
+    environment:
+      - 'MYSQL_DATABASE=InvestmentAggregator'
+      - 'MYSQL_PASSWORD=1234'
+      - 'MYSQL_ROOT_PASSWORD=Data5005'
+      - 'MYSQL_USER=myuser'
+    ports:
+      - '3307:3306'
