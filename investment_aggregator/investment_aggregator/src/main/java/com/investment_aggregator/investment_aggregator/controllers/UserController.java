@@ -1,6 +1,7 @@
 package com.investment_aggregator.investment_aggregator.controllers;
 
 import com.investment_aggregator.investment_aggregator.controllers.dto.CreateUserDTO;
+import com.investment_aggregator.investment_aggregator.controllers.dto.UpdateUserDTO;
 import com.investment_aggregator.investment_aggregator.entities.User;
 import com.investment_aggregator.investment_aggregator.services.UserService;
 import org.springframework.http.ResponseEntity;
@@ -45,6 +46,14 @@ public class UserController {
         var usersFound = userService.findAllUsers();
 
         return ResponseEntity.ok(usersFound);
+
+    }
+    @PutMapping("/update/{userId}")
+    public ResponseEntity<Void> updateUser(@PathVariable("userId") String userId, @RequestBody UpdateUserDTO updateUserDTO){
+
+        userService.updateUser(userId, updateUserDTO);
+
+        return ResponseEntity.noContent().build();
 
     }
 

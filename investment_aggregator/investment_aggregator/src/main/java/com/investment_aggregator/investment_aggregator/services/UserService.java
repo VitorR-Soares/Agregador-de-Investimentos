@@ -1,6 +1,7 @@
 package com.investment_aggregator.investment_aggregator.services;
 
 import com.investment_aggregator.investment_aggregator.controllers.dto.CreateUserDTO;
+import com.investment_aggregator.investment_aggregator.controllers.dto.UpdateUserDTO;
 import com.investment_aggregator.investment_aggregator.entities.User;
 import com.investment_aggregator.investment_aggregator.repositories.UserRepository;
 import com.investment_aggregator.investment_aggregator.utils.ConvertUUID;
@@ -55,6 +56,30 @@ public class UserService {
         var allUsers = userRepository.findAll();
 
         return allUsers;
+
+    }
+    @Transactional
+    public void updateUser(String id, UpdateUserDTO dto){
+
+        var uuid = ConvertUUID.fromHexStringToUUID(id);
+
+        var userIsPresent = userRepository.findById(uuid);
+
+        if (userIsPresent.isPresent()){
+
+            User updateUser = userIsPresent.get();
+
+
+            if(dto.email() != null){
+                updateUser.setEmail(dto.email());
+            }
+            if(dto.password() != null) {
+                updateUser.setPassword(dto.password());
+            }
+
+            userRepository.save(updateUser);
+
+        }
 
     }
 
