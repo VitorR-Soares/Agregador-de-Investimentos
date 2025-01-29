@@ -27,7 +27,7 @@ public class AccountStock {
     @JoinColumn(name = "stock_id")
     private Stock stock;
 
-    @Column(name = "qtd")
-    private Integer qtd;
+    @Column(name = "quantity")
+    private Integer quantity;
 
 }

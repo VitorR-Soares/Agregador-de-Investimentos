@@ -20,15 +20,17 @@ public class BillingAddress {
     @Column(name = "billing_address_id")
     private UUID id;
 
-    @Column(name = "street")
-    private String street;
-
-    @Column(name = "number")
-    private int number;
-
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "billing_address_id")
     @MapsId
     private Account account;
+
+    @Column(name = "street")
+    private String street;
+
+    @Column(name = "number")
+    private Integer number;
+
+
 
 }
