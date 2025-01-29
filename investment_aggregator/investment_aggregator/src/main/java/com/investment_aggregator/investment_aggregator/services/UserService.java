@@ -83,5 +83,18 @@ public class UserService {
 
     }
 
+    @Transactional
+    public void deleteUser(String id){
+
+        var uuid = ConvertUUID.fromHexStringToUUID(id);
+
+        var userFound = userRepository.existsById(uuid);
+
+        if(userFound){
+            userRepository.deleteById(uuid);
+        }
+
+    }
+
 
 }
