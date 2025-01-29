@@ -43,6 +43,9 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Account> accounts;
 
+    public User() {
+    }
+
     public User(UUID id, String username, String email, String password, Instant creationTimeStamp, Instant updateTimeStamp) {
         this.id = id;
         this.username = username;
@@ -58,6 +61,16 @@ public class User {
         this.password = password;
         this.creationTimeStamp = creationTimeStamp;
         this.updateTimeStamp = updateTimeStamp;
+    }
+
+    public User(UUID id, String username, String email, String password, Instant creationTimeStamp, Instant updateTimeStamp, List<Account> accounts) {
+        this.id = id;
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.creationTimeStamp = creationTimeStamp;
+        this.updateTimeStamp = updateTimeStamp;
+        this.accounts = accounts;
     }
 
     public UUID getId() {

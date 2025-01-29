@@ -3,6 +3,7 @@ package com.investment_aggregator.investment_aggregator.services;
 import com.investment_aggregator.investment_aggregator.controllers.dto.CreateUserDTO;
 import com.investment_aggregator.investment_aggregator.entities.User;
 import com.investment_aggregator.investment_aggregator.repositories.UserRepository;
+import com.investment_aggregator.investment_aggregator.utils.ConvertUUID;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
@@ -36,7 +37,17 @@ public class UserService {
         var user = userRepository.save(newUser);
 
         return user;
-
     }
+
+    @Transactional
+    public Optional<User> findUserById(String id){
+
+        var uuid = ConvertUUID.fromHexStringToUUID(id);
+
+        var userFound = userRepository.findById(uuid);
+
+        return userFound;
+    }
+
 
 }
