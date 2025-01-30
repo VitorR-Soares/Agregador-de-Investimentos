@@ -1,5 +1,6 @@
 package com.investment_aggregator.investment_aggregator.controllers;
 
+import com.investment_aggregator.investment_aggregator.controllers.dto.CreateAccountDTO;
 import com.investment_aggregator.investment_aggregator.controllers.dto.CreateUserDTO;
 import com.investment_aggregator.investment_aggregator.controllers.dto.UpdateUserDTO;
 import com.investment_aggregator.investment_aggregator.entities.User;
@@ -63,6 +64,14 @@ public class UserController {
 
         return ResponseEntity.noContent().build();
 
+    }
+    @PostMapping("/account/create/{userId}")
+    public ResponseEntity<Void> createAccount(@PathVariable("userId") String userId,
+                                              @RequestBody CreateAccountDTO createAccountDTO){
+
+        userService.createAccount(userId, createAccountDTO);
+
+        return ResponseEntity.noContent().build();
     }
 
 

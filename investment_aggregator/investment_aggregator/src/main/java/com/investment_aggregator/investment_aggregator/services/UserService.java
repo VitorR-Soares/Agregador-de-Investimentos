@@ -1,16 +1,24 @@
 package com.investment_aggregator.investment_aggregator.services;
 
+import com.investment_aggregator.investment_aggregator.controllers.dto.CreateAccountDTO;
 import com.investment_aggregator.investment_aggregator.controllers.dto.CreateUserDTO;
 import com.investment_aggregator.investment_aggregator.controllers.dto.UpdateUserDTO;
+import com.investment_aggregator.investment_aggregator.entities.Account;
+import com.investment_aggregator.investment_aggregator.entities.BillingAddress;
 import com.investment_aggregator.investment_aggregator.entities.User;
+import com.investment_aggregator.investment_aggregator.repositories.AccountRepository;
+import com.investment_aggregator.investment_aggregator.repositories.BillingAddressRepository;
 import com.investment_aggregator.investment_aggregator.repositories.UserRepository;
 import com.investment_aggregator.investment_aggregator.utils.ConvertUUID;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -19,10 +27,14 @@ import java.util.UUID;
 public class UserService {
 
     private UserRepository userRepository;
+    private AccountRepository accountRepository;
+    private BillingAddressRepository billingAddressRepository;
 
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, AccountRepository accountRepository, BillingAddressRepository billingAddressRepository) {
         this.userRepository = userRepository;
+        this.accountRepository = accountRepository;
+        this.billingAddressRepository = billingAddressRepository;
     }
 
     @Transactional
@@ -93,6 +105,32 @@ public class UserService {
         if(userFound){
             userRepository.deleteById(uuid);
         }
+
+    }
+    @Transactional
+    public void createAccount(String id, CreateAccountDTO dto){
+
+        var uuid = ConvertUUID.fromHexStringToUUID(id);
+
+        var userFound = userRepository.findById(uuid)
+                .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        Account account = new Account(
+                dto.description(),
+                userFound,
+                null,
+                new ArrayList<>()
+        );
+
+        var accountCreated = accountRepository.save(account);
+
+        BillingAddress billingAddress = new BillingAddress(
+                accountCreated,
+                dto.street(),
+                dto.number()
+        );
+
+        billingAddressRepository.save(billingAddress);
 
     }
 
