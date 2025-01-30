@@ -52,6 +52,23 @@ public class AccountService {
         accountStockRepository.save(accountStock);
 
     }
+    @Transactional
+    public List<AccountStockResponseDTO> listStocks(String accountId){
+
+        var uuid = ConvertUUID.fromHexStringToUUID(accountId);
+
+        var accountFound = accountRepository.findById(uuid)
+                .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        var accountStockList = accountFound.getAccountStocks()
+                .stream()
+                .map(accountStock -> new AccountStockResponseDTO(accountStock.getStock().getId(), accountStock.getQuantity(), 0.00))
+                .toList();
+
+        return accountStockList;
+
+
+    }
 
 
 }
