@@ -12,10 +12,8 @@ import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Getter
-@Setter
+
+
 @Entity
 @Table(name = "tb_user")
 public class User {
