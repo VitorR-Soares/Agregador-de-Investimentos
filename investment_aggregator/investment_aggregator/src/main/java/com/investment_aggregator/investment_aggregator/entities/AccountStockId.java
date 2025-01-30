@@ -9,10 +9,7 @@ import lombok.Setter;
 
 import java.util.UUID;
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Getter
-@Setter
+
 @Embeddable
 public class AccountStockId {
 
@@ -22,4 +19,27 @@ public class AccountStockId {
     @Column(name = "account_id")
     private UUID accountId;
 
+    public AccountStockId() {
+    }
+
+    public AccountStockId(String stockId, UUID accountId) {
+        this.stockId = stockId;
+        this.accountId = accountId;
+    }
+
+    public String getStockId() {
+        return stockId;
+    }
+
+    public void setStockId(String stockId) {
+        this.stockId = stockId;
+    }
+
+    public UUID getAccountId() {
+        return accountId;
+    }
+
+    public void setAccountId(UUID accountId) {
+        this.accountId = accountId;
+    }
 }
