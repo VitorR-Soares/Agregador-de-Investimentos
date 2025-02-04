@@ -1,9 +1,12 @@
 package com.investment_aggregator.investment_aggregator.utils;
 
+import org.springframework.stereotype.Component;
+
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.util.UUID;
 
+@Component
 public class ConvertUUID {
 
     public static UUID fromHexStringToUUID(String hex) {
