@@ -13,6 +13,7 @@ import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -131,6 +132,87 @@ class UserServiceTest {
 
             }
         }
+    }
+    @Nested
+    class findAll {
+
+        @Test
+        @DisplayName("Should return all users successfully")
+        void findAllSuccess(){
+            var user = new User(UUID.randomUUID(),
+                    "username",
+                    "email@email.com",
+                    "password",
+                    Instant.now(),
+                    null);
+            var userList = List.of(user);
+
+            when(repository.findAll()).thenReturn(userList);
+
+            var output = service.findAllUsers();
+
+            assertNotNull(output);
+            assertEquals(userList.size(), output.size());
+
+        }
+    }
+    @Nested
+    class delete{
+
+        @Test
+        @DisplayName("Should delete user successfuly when it exists")
+        void deleteSuccess(){
+
+            var uuid = UUID.randomUUID();
+
+            try (MockedStatic<ConvertUUID> mockedStatic = mockStatic(ConvertUUID.class)) {
+                mockedStatic.when(() -> ConvertUUID.fromHexStringToUUID(uuid.toString()))
+                        .thenReturn(uuid);
+
+                when(repository.existsById(uuidArgumentCaptor.capture())).thenReturn(true);
+
+                doNothing()
+                        .when(repository)
+                        .deleteById(uuidArgumentCaptor.capture());
+
+                service.deleteUser(uuid.toString());
+
+                var idList = uuidArgumentCaptor.getAllValues();
+                assertEquals(uuid, idList.get(0));
+                assertEquals(uuid, idList.get(1));
+
+                verify(repository, times(1)).existsById(idList.get(0));
+                verify(repository, times(1)).deleteById(idList.get(1));
+
+            }
+
+        }
+        @Test
+        @DisplayName("Should delete user successfuly when it exists")
+        void deleteFailure() {
+
+            var uuid = UUID.randomUUID();
+
+            try (MockedStatic<ConvertUUID> mockedStatic = mockStatic(ConvertUUID.class)) {
+                mockedStatic.when(() -> ConvertUUID.fromHexStringToUUID(uuid.toString()))
+                        .thenReturn(uuid);
+
+                when(repository.existsById(uuidArgumentCaptor.capture())).thenReturn(false);
+
+                service.deleteUser(uuid.toString());
+
+
+                assertEquals(uuid, uuidArgumentCaptor.getValue());
+
+
+                verify(repository, times(1)).existsById(uuidArgumentCaptor.getValue());
+                verify(repository, times(0)).deleteById(any());
+
+            }
+
+        }
+
+
     }
 
 
