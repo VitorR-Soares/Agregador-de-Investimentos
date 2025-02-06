@@ -1,6 +1,7 @@
 package com.investment_aggregator.investment_aggregator.services;
 
 import com.investment_aggregator.investment_aggregator.controllers.dto.CreateUserDTO;
+import com.investment_aggregator.investment_aggregator.controllers.dto.UpdateUserDTO;
 import com.investment_aggregator.investment_aggregator.entities.User;
 import com.investment_aggregator.investment_aggregator.repositories.UserRepository;
 import com.investment_aggregator.investment_aggregator.utils.ConvertUUID;
@@ -26,9 +27,6 @@ class UserServiceTest {
 
     @Mock
     UserRepository repository;
-
-    @Mock
-    ConvertUUID convertUUID;
 
     @InjectMocks
     UserService service;
@@ -209,7 +207,69 @@ class UserServiceTest {
                 verify(repository, times(0)).deleteById(any());
 
             }
+        }
+    }
+    @Nested
+    class update {
 
+        @Test
+        @DisplayName("Should update a user when it exists and when DTO is filled")
+        void updateSuccess(){
+
+            UpdateUserDTO dto = new UpdateUserDTO("novoEmail", "novaSenha");
+
+            var user = new User(UUID.randomUUID(),
+                    "username",
+                    "email@email.com",
+                    "password",
+                    Instant.now(),
+                    null);
+
+            try (MockedStatic<ConvertUUID> mockedStatic = mockStatic(ConvertUUID.class)) {
+                mockedStatic.when(() -> ConvertUUID.fromHexStringToUUID(user.getId().toString()))
+                        .thenReturn(user.getId());
+
+                when(repository.findById(uuidArgumentCaptor.capture())).thenReturn(Optional.of(user));
+                when(repository.save(userArgumentCaptor.capture())).thenReturn(user);
+
+                service.updateUser(user.getId().toString(), dto);
+
+                assertEquals(uuidArgumentCaptor.getValue(), user.getId());
+
+                var userCaptured = userArgumentCaptor.getValue();
+                assertEquals(userCaptured.getEmail(), dto.email());
+                assertEquals(userCaptured.getPassword(), dto.password());
+
+                verify(repository, times(1)).findById(uuidArgumentCaptor.getValue());
+                verify(repository, times(1)).save(userArgumentCaptor.getValue());
+            }
+        }
+        @Test
+        @DisplayName("Should not update a user when it doesn't exists")
+        void updateFailure(){
+            UpdateUserDTO dto = new UpdateUserDTO("novoEmail", "novaSenha");
+
+            var user = new User(UUID.randomUUID(),
+                    "username",
+                    "email@email.com",
+                    "password",
+                    Instant.now(),
+                    null);
+
+            try (MockedStatic<ConvertUUID> mockedStatic = mockStatic(ConvertUUID.class)) {
+                mockedStatic.when(() -> ConvertUUID.fromHexStringToUUID(user.getId().toString()))
+                        .thenReturn(user.getId());
+
+                when(repository.findById(uuidArgumentCaptor.capture())).thenReturn(Optional.empty());
+
+                service.updateUser(user.getId().toString(), dto);
+
+                assertEquals(user.getId(), uuidArgumentCaptor.getValue());
+
+                verify(repository, times(1)).findById(uuidArgumentCaptor.getValue());
+                verify(repository, times(0)).save(any());
+
+            }
         }
 
 
