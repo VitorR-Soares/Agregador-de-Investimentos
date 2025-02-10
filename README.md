@@ -52,7 +52,7 @@ git clone https://github.com/VitorR-Soares/Agregador-de-Investimentos.git
 
 2. Instale as dependências com Maven
 3. Garanta que possua o Docker Instalado
-4. Acesse seu token no site da Brapi e o coloque no application.properties
+4. Acesse seu token no site da Brapi e o configure como variável de ambiente
 
 ## Utilização
 
