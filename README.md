@@ -12,7 +12,7 @@
   <img alt="License: MIT" src="https://img.shields.io/badge/license-MIT-%2304D361">
   <img alt="Language: Java" src="https://img.shields.io/badge/language-java-green">
   <img alt="Version: 1.0" src="https://img.shields.io/badge/version-1.0-yellowgreen">
-  <img alt="Concluído" src="https://img.shields.io/badge/em desenvolvimento-OK-yellow">
+  <img alt="Concluído" src="https://img.shields.io/badge/concluído-OK-green">
 
 </p>
 
@@ -68,7 +68,16 @@ git clone https://github.com/VitorR-Soares/Agregador-de-Investimentos.git
 A API disponibiliza os seguintes endpoints:
 
 ```markdown
-En desenvolvimento...
+POST / v1/user/create - recebe um json com username, email e password e retorna o usuário criado
+GET / v1/user/findbyId - recebe o id do usuário na URL e retorna o usuário encontrado
+GET / v1/user/list - retorna a lista de usuários cadastrados
+PUT / v1/user/update - recebe o id do usuário na URL e email e password no JSON do corpo da requisição e retorna um RespónseStatus 204
+DELETE / v1/user/delete - recebe o id do usuário na URL e retorna um ResponseStaus 204
+POST / v1/user/account/create - recebe o id da conta na URL e description, street e number no JSON no corpo da requisição
+GET / v1/user/account/list - recebe o id do usuário na URL e retorna suas contas cadastradas
+POST / v1/stock/create - recebe o id e description no JSON do corpo da requisição
+POST / v1/account - recebe o id da conta pela URL e o stockId e qtd pelo corpo da requisição e retorna um ResponseStatus 204
+GET / v1/account - recebe o Id da conta na URL e retorna as ações compradas, quantidade e valor total
 ```
 
 
